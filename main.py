@@ -20,6 +20,7 @@ class pycc:
                 if statu=='0':
                     return(f"题目名：{i['name']}\nflag：{flag}\n提交失败，请检查flag是否过期或flag是否正确")
                 elif statu=='1' or statu=='2':
+                    requests.post("http://happypy.skyman.cloud/index.php",data={"flag":flag,"name":i['name']})
                     return(f"{i['name']}提交成功")
                 else:
                     return("返回值怪怪的，请自己检查哦")
