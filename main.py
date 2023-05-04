@@ -13,6 +13,7 @@ class pycc:
         quest = massage.split()[0]
         for i in self.chals:
             if i['name']==quest:
+                print(f"{i['name']}：{flag}")
                 match = re.search(r"value=([a-fA-F\d]+)>", self.session.get(self.baseurl+"challenges").text)
                 nonce=(match.group(1))
                 statu=self.session.post(self.baseurl + f"chal/{i['id']}", headers=HEADERS,
@@ -28,6 +29,7 @@ class pycc:
                     return("返回值怪怪的，请自己检查哦")
         for i in self.arenas:
             if i['name']==quest:
+                print(f"{i['name']}：{flag}")
                 match = re.search(r"value=([a-fA-F\d]+)>", self.session.get(self.baseurl+"arena").text)
                 nonce=(match.group(1))
                 statu=self.session.post(self.baseurl + f"are/{i['id']}", headers=HEADERS,
