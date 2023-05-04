@@ -57,7 +57,7 @@ class pycc:
             chals.append(self.session.get(url=self.baseurl+"chals/"+str(i['id']),headers=HEADERS).json())
         return chals
 def sendMessage(QID,message):
-    request.post("http://127.0.0.1:5700/send_msg",data={"user_id":str(QID),"message":message})
+    requests.post("http://127.0.0.1:5700/send_msg",data={"user_id":str(QID),"message":message})
 @app.route('/', methods=["POST"])
 def post_data():
     if request.get_json().get('message_type')=='private':
