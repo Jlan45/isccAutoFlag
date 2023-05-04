@@ -8,9 +8,9 @@ class pycc:
         self.session=requests.session()
         self.baseurl="https://iscc.isclab.org.cn/"
         self.session.post(url=self.baseurl+"login",headers=HEADERS,data={"name":USERNAME,"password":PASSWORD})
-    def submitFlag(self,massage):
-        flag = re.search(r'ISCC{.+}', massage).group()
-        quest = massage.split()[0]
+    def submitFlag(self,message,gid,uid):
+        flag = re.search(r'ISCC{.+}', message).group()
+        quest = message.split()[0]
         for i in self.chals:
             if i['name']==quest:
                 print(f"{i['name']}：{flag}")
@@ -43,6 +43,9 @@ class pycc:
                     return(f"{i['name']}提交过了，请勿重复提交")
                 else:
                     return("返回值怪怪的，请自己检查哦")
+        if flag:
+            sendMessage(ADMINQQ,f"疑似有新flag，请自行检查，来自{gid}群的{uid}")
+            sendMessage(ADMINQQ,message)
     def getRanking(self):
         "https://iscc.isclab.org.cn/arenasolves"
         "https://iscc.isclab.org.cn/solves"
@@ -83,7 +86,7 @@ def post_data():
         message = request.get_json().get('raw_message')
         nick=request.get_json().get('sender').get('nickname')
         if "ISCC{" in message:
-            mes=PYCC.submitFlag(message)
+            mes=PYCC.submitFlag(message,gid,uid)
             print(mes)
             sendMessage(ADMINQQ,mes)
         # print(gid)
