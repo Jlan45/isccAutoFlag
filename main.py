@@ -9,7 +9,7 @@ class pycc:
         self.baseurl="https://iscc.isclab.org.cn/"
         self.session.post(url=self.baseurl+"login",headers=HEADERS,data={"name":USERNAME,"password":PASSWORD})
     def submitFlag(self,massage):
-        flag = re.search(r'ISCC{.+}', massage)
+        flag = re.search(r'ISCC{.+}', massage).group()
         quest = massage.split()[0]
         for i in self.chals:
             if i['name']==quest:
@@ -19,9 +19,11 @@ class pycc:
                                         data={"key": flag, "nonce": nonce}).text
                 if statu=='0':
                     return(f"题目名：{i['name']}\nflag：{flag}\n提交失败，请检查flag是否过期或flag是否正确")
-                elif statu=='1' or statu=='2':
-                    requests.post("http://happypy.skyman.cloud/index.php",data={"flag":flag,"name":i['name']})
-                    return(f"{i['name']}提交成功")
+                elif statu == '1':
+                    requests.post("http://happypy.skyman.cloud/index.php", data={"flag": flag, "name": i['name']})
+                    return (f"{i['name']}提交成功")
+                elif statu == '2':
+                    return (f"{i['name']}提交过了，请勿重复提交")
                 else:
                     return("返回值怪怪的，请自己检查哦")
         for i in self.arenas:
@@ -32,8 +34,11 @@ class pycc:
                                         data={"key": flag, "nonce": nonce}).text
                 if statu=='0':
                     return(f"题目名：{i['name']}\nflag：{flag}\n提交失败，请检查flag是否过期或flag是否正确")
-                elif statu=='1' or statu=='2':
+                elif statu=='1':
+                    requests.post("http://happypy.skyman.cloud/index.php",data={"flag":flag,"name":i['name']})
                     return(f"{i['name']}提交成功")
+                elif statu=='2':
+                    return(f"{i['name']}提交过了，请勿重复提交")
                 else:
                     return("返回值怪怪的，请自己检查哦")
     def getRanking(self):
